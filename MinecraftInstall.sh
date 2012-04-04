@@ -273,7 +273,8 @@ screen -S minecraft -p world -X stuff $quote""kickall Server restart, some back 
 sleep 1
 screen -S minecraft -p world -X stuff $quote""stop$quote\140echo '$nln'\140
 killall -9 screen
-killall -9 java" > stop.sh
+killall -9 java
+screen -wipe" > stop.sh
 		cd $DIR/
 		chmod 777 stop.sh
 		echo "## stop.sh written ##" >> MCInstallLog.txt
@@ -329,19 +330,18 @@ _-_-_-_-_-_-_-|   /\_/\
 		else 
 		echo "Installing sun-java6-jdk"
 		sudo apt-get install sun-java6-jdk
+		sleep 2
 		fi;;
 		
 		
 		
 	esac
-	sleep 2
 	clear
 	echo "
 |--------------------------------|
 |   Do you want apache2?         |
 |				 |
 |1. Yes apache2 		 |	
-|2. Yes apache2 and extras	 |
 |2. No apache2                   |
 |--------------------------------|"
 	read apaInstall
@@ -351,15 +351,9 @@ _-_-_-_-_-_-_-|   /\_/\
 				apt-get install php5-common libapache2-mod-php5 php5-cli
 				apt-cache search php5
 				sudo apt-get install apache2-mpm-prefork
-				sudo /etc/init.d/apache2 restart;;
-			[2] ) clear
-				sudo apt-get install apache2 
-				apt-get install php5-common libapache2-mod-php5 php5-cli
-				apt-cache search php5
-				sudo apt-get install apache2-mpm-prefork
 				sudo /etc/init.d/apache2 restart
 				clear
-		echo "
+				echo "
 				
 |-------------------------------|
 |   Do you want a map renderer? |
@@ -377,15 +371,15 @@ _-_-_-_-_-_-_-|   /\_/\
 				touch $DIR/scripts/maprender.sh
 				sudo mkdir /var/www/map
 				echo -e "#!/bin/bash/
-				overviewer.py --rendermodes=smooth-lighting $DIR/world /var/www/map/" >> $DIR/scripts/maprender.sh;;
+overviewer.py --rendermodes=smooth-lighting $DIR/world /var/www/map/" >> $DIR/scripts/maprender.sh;;
 			[2] ) clear;;
 			esac
 		clear
 		echo "
 				
 |-------------------------------|
-| How often do you want to cook?|
-|				|
+| How often do you want to cook |
+| 	    the map?		|
 |1. Monthly     		|
 |2. Weekly      		|
 |3. Daily			|
@@ -393,14 +387,17 @@ _-_-_-_-_-_-_-|   /\_/\
 |-------------------------------|"
 				read cookCron
 				case "$cookCron" in
-					[1] ) cronmap="@monthly";;
-					[2] ) cronmap="@weekly";;
-					[3] ) cronmap="@daily";;
-					[4] ) cronmap="@hourly";;
+					[1] ) cronmap="@monthly"
+						echo "$cronmap $DIR/scripts/maprender.sh" >> crondump;;
+					[2] ) cronmap="@weekly"
+						echo "$cronmap $DIR/scripts/maprender.sh" >> crondump;;
+					[3] ) cronmap="@daily"
+						echo "$cronmap $DIR/scripts/maprender.sh" >> crondump;;
+					[4] ) cronmap="@hourly"
+						echo "$cronmap $DIR/scripts/maprender.sh" >> crondump;;
 				
-				esac
-				echo "$cronmap $DIR/scripts/maprender.sh" >> crondump;;
-			[3] ) clear;;
+				esac;;
+			[2] ) clear;;
 		esac
 		clear
 		sleep .5
@@ -409,8 +406,10 @@ _-_-_-_-_-_-_-|   /\_/\
 		echo -e "#!/bin/bash/
 java -jar craftbukkit.jar" > tempStart.sh
 		chmod 0777 tempStart.sh
-		screen -wipe >> MCInstallLog.txt
-		screen -dmS minecraft -t world -m ./tempStart.sh 
+		screen -dmS minecraft -t world -m ./tempStart.sh
+		echo "IT LIVES!!" 
+		sleep 1 
+		echo "Killing the beast"
 		sh $DIR/scripts/stop.sh
 		### Begin plugins ###
 		echo "Success!"
@@ -435,7 +434,6 @@ java -jar craftbukkit.jar" > tempStart.sh
 			cd ../
 			clear
 			echo "Initializing Plugins"
-			screen -wipe >> MCInstallLog.txt
 			screen -dmS minecraft -t world -m ./tempStart.sh
 			sleep 10
 			sh $DIR/scripts/stop.sh
