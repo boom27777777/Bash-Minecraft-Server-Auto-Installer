@@ -8,7 +8,7 @@ echo "
 ^        By: boom2777777	^
 ^     Scripts by: gravypod	^
 ^     Supported OS's (So Far)	^
-^ (v0.1) Debian & Ubuntu 	^
+^        Debian & Ubuntu 	^
 <<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>
 
 
