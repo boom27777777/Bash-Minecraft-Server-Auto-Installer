@@ -23,44 +23,46 @@ case "$Menu" in
 [1]	)	clear
 		echo "
 |-------------------------------|
-|	  	  	((RAM))				|
-|	 	 (*Recomended)			|
-|				 				|
-|   1. 512 MB*	2. 1024 MB*	    |
-|   3. 1536 MB*	4. 2048 MB	    |
-|   5. 2560 MB 	6. 3072 MB	    |
-|        7. Custome		        |
-|	 (Add m for MB, G for GB)   |
+|	     ((RAM))		|
+|	  (*Recomended)		|
+|				|
+|   1. 512 MB*	2. 1024 MB*	|
+|   3. 1536 MB*	4. 2048 MB	|
+|   5. 2560 MB 	6. 3072 MB	|
+|        7. Custome		|
+|   (Add m for MB, G for GB)	|
 |-------------------------------|"
 		read RAM
 		case "$RAM" in
-			[1] ) DRAM="512";;
-			[2] ) DRAM="1024";;
-			[3] ) DRAM="1536";;
-			[4] ) DRAM="2048";;
-			[5] ) DRAM="2560";;
-			[6] ) DRAM="3072";;
-			[7] ) read DRAM
+			[1] ) DRAM="512m";;
+			[2] ) DRAM="1024m";;
+			[3] ) DRAM="1536m";;
+			[4] ) DRAM="2048m";;
+			[5] ) DRAM="2560m";;
+			[6] ) DRAM="3072m";;
+			[7] ) read DRAM;;
+		esac
+		clear
 echo "
 |-------------------------------|
-|	  	  	((CPU))				|
-|	 	 (*Recomended)			|
-|				 				|
-|   1. 1 CPU  	2. 2 CPU  	    |
-|   3. 3 CPU   	4. 4 CPU  	    |
-|   5. 5 CPU   	6. 6 CPU  	    |
-|        7. Custome		        |
+|	     ((CPU))		|
+|	  (*Recomended)		|
+|				|
+|   1. 1 CPU  	2. 2 CPU  	|
+|   3. 3 CPU   	4. 4 CPU  	|
+|   5. 5 CPU   	6. 6 CPU  	|
+|        7. Custome		|
 | (The amount of cores to use)  |
 |-------------------------------|"
 		read CPU
-		case $CPU
+		case "$CPU" in
 			[1] ) CPU="1";;
 			[2] ) CPU="2";;
 			[3] ) CPU="3";;
 			[4] ) CPU="4";;
 			[5] ) CPU="5";;
 			[6] ) CPU="6";;
-			[7] ) read CPU
+			[7] ) read CPU;;
 		esac
 		clear
 		echo "Checking Sudo is installed"
@@ -144,13 +146,14 @@ echo "
 		echo "Got craftbukkit.jar"
 		sleep 1
 		echo "Writing Scripts"
+		cd $DIR/scripts/
 		quote='\042'
 		delta='\044'
 		nln='\134''\162'
 		sleep 1
 		echo "Daily Backup Script"
 		echo "## Begining Scripts ##" >> MCInstallLog.txt
-		touch scripts/backupday.sh
+		touch backupday.sh
 sudo echo -e "#!/bin/bash/
 cd $DIR
 screen -S minecraft -p world -X stuff $quote""say Starting daily backup.$quote\140echo '$nln'\140
@@ -182,7 +185,7 @@ exit $delta?" > backupday.sh
 		echo "## backupday.sh written ##" >> MCInstallLog.txt
 		sleep .5
 		echo "Hourly Backup Script"
-		touch scripts/backuphr.sh
+		touch backuphr.sh
 sudo echo -e "#!/bin/bash
 cd $DIR
 T=$quote $delta(date +%s)$quote
@@ -203,7 +206,7 @@ exit $delta?" > backuphr.sh
 		echo "## backuphr.sh written ##" >> MCInstallLog.txt
 		sleep .5
 		echo "Server Restart Script"
-		touch scripts/restart.sh
+		touch restart.sh
 sudo echo -e "#!/bin/bash/
 
 cd $DIR
@@ -220,7 +223,7 @@ screen -S minecraft -p world -X stuff $quote""stop$quote\140echo '$nln'\140" > r
 		echo "## restart.sh written ##" >> MCInstallLog.txt
 		sleep .5
 		echo "Server Start Script"
-		touch scripts/serverstart-main.sh
+		touch serverstart-main.sh
 sudo echo -e "#!/bin/bash
 while :
 do
@@ -229,6 +232,7 @@ done" > serverstart-main.sh
                 chmod 777 serverstart-main.sh
 		echo "## serverstart-main.sh written ##" >> MCInstallLog.txt
 		sleep .5
+		cd $DIR/
 		echo "Runner Script"
 		touch runner.sh
 sudo echo -e "#!/bin/sh
@@ -239,7 +243,7 @@ killall craftbukkit
 screen -wipe
 sleep 2
 echo Starting Server and Screen 
-screen -dmS minecraft -t world -m $DIR/serverstart-main.sh
+screen -dmS minecraft -t world -m $DIR/scripts/serverstart-main.sh
 sleep 1
 echo Server Started, Attaching
 sleep 2
@@ -248,6 +252,7 @@ screen -x" > runner.sh
 		chmod 777 runner.sh
 		echo "## runner.sh written ##" >> MCInstallLog.txt
 		sleep .5
+		cd $DIR/scripts
 		echo "Server Save Script"
 		touch save.sh
 sudo echo -e "#!/bin/bash
@@ -269,6 +274,7 @@ sleep 1
 screen -S minecraft -p world -X stuff $quote""stop$quote\140echo '$nln'\140
 killall -9 screen
 killall -9 java" > stop.sh
+		cd $DIR/
 		chmod 777 stop.sh
 		echo "## stop.sh written ##" >> MCInstallLog.txt
 		sleep .5
@@ -322,29 +328,37 @@ _-_-_-_-_-_-_-|   /\_/\
 		echo "You already have Java installed"
 		else 
 		echo "Installing sun-java6-jdk"
-		sudo apt-get install sun-java6-jdk;;
+		sudo apt-get install sun-java6-jdk
+		fi;;
 		
 		
 		
 	esac
 	sleep 2
+	clear
 	echo "
-		|--------------------------------|
-		|   Do you want apache2?         |
-		|				 |
-		|1. Yes apache2   		 |
-		|2. No apache2                   |
-		|				 |
-		|--------------------------------|"
+|--------------------------------|
+|   Do you want apache2?         |
+|				 |
+|1. Yes apache2 		 |	
+|2. Yes apache2 and extras	 |
+|2. No apache2                   |
+|--------------------------------|"
 	read apaInstall
-		case $apaInstall
+		case "$apaInstall" in
 			[1] ) clear 
 				sudo apt-get install apache2 
 				apt-get install php5-common libapache2-mod-php5 php5-cli
 				apt-cache search php5
 				sudo apt-get install apache2-mpm-prefork
 				sudo /etc/init.d/apache2 restart;;
-		esac		
+			[2] ) clear
+				sudo apt-get install apache2 
+				apt-get install php5-common libapache2-mod-php5 php5-cli
+				apt-cache search php5
+				sudo apt-get install apache2-mpm-prefork
+				sudo /etc/init.d/apache2 restart
+				clear
 		echo "
 				
 |-------------------------------|
@@ -354,37 +368,41 @@ _-_-_-_-_-_-_-|   /\_/\
 |2. No Map render?		|
 |				|
 |-------------------------------|"
-				read mapRender
-				case $mapRender
-				[1] ) clear 
-					sudo deb http://overviewer.org/debian ./
-					sudo apt-get update
-					sudo apt-get install minecraft-overviewer
-					touch maprender.sh
-					mkdir /var/www/map
-					echo -e "#!/bin/bash/
-					overviewer.py --rendermodes=smooth-lighting $DIR/world /var/www/map/
-					"
+			read mapRender
+			case "$mapRender" in
+			[1] ) clear 
+				sudo deb http://overviewer.org/debian ./
+				sudo apt-get update
+				sudo apt-get install minecraft-overviewer
+				touch $DIR/scripts/maprender.sh
+				sudo mkdir /var/www/map
+				echo -e "#!/bin/bash/
+				overviewer.py --rendermodes=smooth-lighting $DIR/world /var/www/map/" >> $DIR/scripts/maprender.sh;;
+			[2] ) clear;;
+			esac
+		clear
 		echo "
 				
 |-------------------------------|
 | How often do you want to cook?|
 |				|
-|1. monthly     		|
-|2. weekly      		|
-|3.daily			|
-|4. hourly			|
+|1. Monthly     		|
+|2. Weekly      		|
+|3. Daily			|
+|4. Hourly			|
 |-------------------------------|"
 				read cookCron
-						case $cookCron
-						[1] ) cronmap="@monthly";;
-						[2] ) cronmap="@weekly";;
-						[3] ) cronmap="@daily";;
-						[4] ) cronmap="@hourly";;
-				echo $cronmap $DIR/scripts/maprenter.sh >> crondump;;
-				[2] ) clear ;;
-	case $apaInstall
-	[2] ) clear ;;
+				case "$cookCron" in
+					[1] ) cronmap="@monthly";;
+					[2] ) cronmap="@weekly";;
+					[3] ) cronmap="@daily";;
+					[4] ) cronmap="@hourly";;
+				
+				esac
+				echo "$cronmap $DIR/scripts/maprender.sh" >> crondump;;
+			[3] ) clear;;
+		esac
+		clear
 		sleep .5
 		echo "Server Startup test!"
 		touch tempStart.sh
@@ -393,7 +411,7 @@ java -jar craftbukkit.jar" > tempStart.sh
 		chmod 0777 tempStart.sh
 		screen -wipe >> MCInstallLog.txt
 		screen -dmS minecraft -t world -m ./tempStart.sh 
-		sh stop.sh
+		sh $DIR/scripts/stop.sh
 		### Begin plugins ###
 		echo "Success!"
 		sleep 1
@@ -420,25 +438,24 @@ java -jar craftbukkit.jar" > tempStart.sh
 			screen -wipe >> MCInstallLog.txt
 			screen -dmS minecraft -t world -m ./tempStart.sh
 			sleep 10
-			sh stop.sh
-			echo "Server Installed using boom277777777's Awesome Installer" >> $DIR/plugins/Essentials/motd.txt
-			sleep 5
+			sh $DIR/scripts/stop.sh
 			rm tempStart.sh
 			echo "Plugins Installed";;
 		[2] ) 	rm tempStart.sh
 			echo "Plugins Not Installed";;
 		esac
-		exit;;
 		crontab crondump >> MCInstallLog.txt
 		rm crondump
+		echo "Exiting, Run server with 'sh runner.sh'"
+		exit;;
 	[2] )	clear
 		echo "Starting Update "$(date +%y-%m-%d)""
 		echo "## Begining Update "$(date +%y-%m-%d)" ##" >> MCInstallLog.txt
 		echo "Killing server"
 		cd $DIR
-		sh save.sh
+		sh $DIR/scripts/save.sh
 		sleep 2
-		sh stop.sh
+		sh $DIR/scripts/stop.sh
 		echo "Grabbing new jar"
 		echo "## Begining wget ##" >> MCInstallLog.txt
 			rm craftbukkit.jar
@@ -476,6 +493,9 @@ java -jar craftbukkit.jar" > tempStart.sh
 		touch crontabReset 
 		crontab crontabReset
 		rm crontabReset
+		rm -r scripts/
+		rm -r logs/
+		rm -r minecraft/
 		rm -r world/
 		rm -r world_nether/
 		rm -r world_the_end/
