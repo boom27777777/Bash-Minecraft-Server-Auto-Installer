@@ -48,7 +48,7 @@ echo "
 |	     ((CPU))		|
 |	  (*Recomended)		|
 |				|
-|   1. 1 CPU  	2. 2 CPU  	|
+|   1. 1 CPU*  	2. 2 CPU  	|
 |   3. 3 CPU   	4. 4 CPU  	|
 |   5. 5 CPU   	6. 6 CPU  	|
 |        7. Custome		|
