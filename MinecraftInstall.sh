@@ -308,11 +308,12 @@ _-_-_-_-_-_-_-|   /\_/\
 -_-_-_-_-_-_-~|__( ^ .^)  +     +  
 -_-_-_-_-_-_-_-_-""  ""      
 +      o         o   +       o"
-		wget http://download.oracle.com/otn-pub/java/jdk/7/jdk-7-linux-x64.tar.gz ./jdk7.tar.gz
-		mkdir /usr/lib64/jvm/
-		tar zxvf jdk-7-linux-x64.tar.gz -C /usr/lib64/jvm/
-		update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk1.7.0/bin/java 1065
-		update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk1.7.0/bin/javac 1065
+		#wget http://download.oracle.com/otn-pub/java/jdk/7/jdk-7-linux-x64.tar.gz ./jdk7.tar.gz
+		#mkdir /usr/lib64/jvm/
+		#tar zxvf jdk-7-linux-x64.tar.gz -C /usr/lib64/jvm/
+		#update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk1.7.0/bin/java 1065
+		#update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk1.7.0/bin/javac 1065
+		sudo apt-get install openjdk-7-jre
 		echo "
 		
 		Click 2!!!!
