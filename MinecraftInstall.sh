@@ -141,7 +141,7 @@ echo "
         touch MCInstallLog.txt
         echo "Grabbing craftbukkit.jar"
             echo "## Begining wget ##" >> MCInstallLog.txt
-            wget http://dl.bukkit.org/downloads/craftbukkit/get/latest-rb/craftbukkit.jar ./craftbukkit.jar > MCInstallLog.txt
+            wget https://cdn.getbukkit.org/craftbukkit/craftbukkit-1.15.2.jar ./craftbukkit-1.15.2.jar > MCInstallLog.txt
         clear
         echo "Got craftbukkit.jar"
         sleep 1
